@@ -170,7 +170,7 @@ object DailyDataJob {
 
     val result = gc.sql(
       """
-        |select a.app_id,a.app_name,a.country,a.platform,a.revenue,a.impression,a.dau,a.dnu,a.spend,a.af_organ_install,a.dnu_dau,a.imps_dau,a.ecpm,a.ads_arpu,
+	    |select a.app_id,a.app_name,a.country,a.platform,a.revenue,a.impression,a.dnu,a.dnu,a.spend,a.af_organ_install,a.dnu_dau,a.imps_dau,a.ecpm,a.ads_arpu,
         |a.organ_install,a.cpi,a.roi,b.day_spend,b.day_dau,c.month_revenue,c.month_spend,a.day,a.rank,b.day_revenue,d.yester_revenue,
         |a.revenue/b.day_revenue as dod,(d.yester_revenue-a.revenue)/d.yester_revenue as mom
         |from(select k.*,rank() over(partition by k.day_p,k.app_id,k.platform order by k.revenue desc) as rank
@@ -204,7 +204,8 @@ object DailyDataJob {
         |FROM yesterdayTable
         |group by  day_p,day,app_id,app_name,country,platform) d
         |on a.app_id = d.app_id and a.country = d.country and a.platform=d.platform
-        |""".stripMargin)
+
+        """.stripMargin)
 
     println("最终结果数据处理完成。。。。")
     if (debug) {
